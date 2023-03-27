@@ -45,7 +45,7 @@ public class File {
         return objectArrayList.toString();
     }
 
-    public String objectWriter(ArrayList<Object> objectList, String file, boolean bool) {
+    public boolean objectWriter(Menu objectList, String file, boolean bool) {
         FileOutputStream writer;
         ObjectOutputStream byteObject;
 
@@ -56,9 +56,9 @@ public class File {
             byteObject.close();
             writer.close();
         } catch (IOException ex) {
-            return ex.toString();
+            return false;
         }
 
-        return "Object save";
+        return true;
     }
 }
