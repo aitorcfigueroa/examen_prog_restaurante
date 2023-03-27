@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public class File {
     public String fileReader(String file) {
@@ -18,16 +19,46 @@ public class File {
         return result;
     }
 
-    public boolean saveData(String str, String file, boolean bool) {
-        FileWriter writer;
+    public String objectReader(String file) {
+        ArrayList<Object> objectArrayList = new ArrayList<>();
+        FileInputStream reader;
+        ObjectInputStream objectReader;
+        Object object;
         try {
-            writer = new FileWriter(file, bool);
-            writer.write(str);
+            reader = new FileInputStream(file);
+            objectReader = new ObjectInputStream(reader);
+            do {
+                try {
+                    object = objectReader.readObject();
+                    objectArrayList.add(object);
+                } catch (EOFException ex) {
+                    object = null;
+                }
+            } while (object != null);
+            objectReader.close();
+            reader.close();
+        } catch (IOException | ClassNotFoundException ex) {
+            System.out.println(ex);
+            return ex.toString();
+        }
+
+        return objectArrayList.toString();
+    }
+
+    public String objectWriter(ArrayList<Object> objectList, String file, boolean bool) {
+        FileOutputStream writer;
+        ObjectOutputStream byteObject;
+
+        try {
+            writer = new FileOutputStream(file, bool);
+            byteObject = new ObjectOutputStream(writer);
+            byteObject.writeObject(objectList);
+            byteObject.close();
             writer.close();
         } catch (IOException ex) {
-            System.out.println(ex.toString());
-            return false;
+            return ex.toString();
         }
-        return true;
+
+        return "Object save";
     }
 }
